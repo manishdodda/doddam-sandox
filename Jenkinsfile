@@ -1,11 +1,13 @@
-@Library('library-demo')_
+@Library('library-demo') _
 
 pipeline {
     agent any
     stages{
         stage ("Testing") {
             steps{
-                src.test_file.call()
+                script{
+                    test_file()
+                }
             }
         }
     }
