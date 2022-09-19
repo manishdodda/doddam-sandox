@@ -6,7 +6,5 @@ pipeline {
         stage ("Testing") {
             test_file()
         }
-        }
     }
-}
 }
