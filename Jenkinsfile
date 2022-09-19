@@ -5,7 +5,7 @@ pipeline {
     stages{
         stage ("Testing") {
             steps{
-                test_file()
+                src.test_file.call()
             }
         }
     }
