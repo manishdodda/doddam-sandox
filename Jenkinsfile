@@ -19,7 +19,8 @@ pipeline {
             }
             steps{
                 script{
-                    unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: ${${env.BRANCH_NAME}_fmr_unix})
+                    println env.BRANCH_NAME
+                    //unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: ${env.BRANCH_NAME}_fmr_unix})
                 }
             }
         }
