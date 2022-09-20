@@ -13,9 +13,7 @@ pipeline {
     stages{
         stage ("Deploy to Unix") {
             when {
-                expression {
-                    params.Deploy_to_Unix == "Yes"
-                }
+                expression { params.Deploy_to_Unix == "Yes" }
             }
             steps{
                 script{
