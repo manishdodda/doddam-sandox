@@ -3,14 +3,14 @@
 pipeline {
     agent any
     environment {
-        unix_dev = "${env.BRANCH_NAME}"
+        snowflake = "${env.BRANCH_NAME}_snowflake"
     }
 
     stages{
         stage ("Testing") {
             steps{
                 script{
-                    unix_deploy(unix_dev)
+                    unix_deploy(snowflake)
                 }
             }
         }
