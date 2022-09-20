@@ -19,9 +19,8 @@ pipeline {
             }
             steps{
                 script{
-                    String varName = "${env.BRANCH_NAME}_fmr_unix"
-                    println "${varName}"
-                    //unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: ${env.BRANCH_NAME}_fmr_unix})
+                    //String varName = "${env.BRANCH_NAME}_fmr_unix"
+                    unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: "${getProperty("${env.BRANCH_NAME}_fmr_unix")}")
                 }
             }
         }
