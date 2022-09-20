@@ -2,9 +2,10 @@
 
 pipeline {
     agent any
-    environment {
-        snowflake = "${env.BRANCH_NAME}_snowflake"
+    environment { 
+        unix_src_path = "unix_scripts/"
         unix_deploy_path = "/tmp/"
+        unix_server = "${env.BRANCH_NAME}_fmr_unix"
     }
     parameters {
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
@@ -18,7 +19,7 @@ pipeline {
             }
             steps{
                 script{
-                    unix_deploy(unix_deploy_path)
+                    unix_deploy(unix_src_path, unix_deploy_path, unix_server)
                 }
             }
         }
