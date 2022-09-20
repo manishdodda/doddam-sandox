@@ -6,7 +6,8 @@ pipeline {
         stage ("Testing") {
             steps{
                 script{
-                    unix_deploy()
+                    String Name = 'Manish Gandhi Dodda' 
+                    unix_deploy(Name)
                 }
             }
         }
