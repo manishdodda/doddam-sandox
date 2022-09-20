@@ -2,12 +2,15 @@
 
 pipeline {
     agent any
+    environment {
+        unix_dev = ${env.BRANCH_NAME}
+    }
+
     stages{
         stage ("Testing") {
             steps{
                 script{
-                    String Name = 'Manish Gandhi Dodda' 
-                    unix_deploy(Name)
+                    unix_deploy(unix_dev)
                 }
             }
         }
