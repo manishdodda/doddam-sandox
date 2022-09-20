@@ -1,4 +1,4 @@
-@Library('library-demo') _
+@Library('library-demo@feature/doddam') _
 
 pipeline {
     agent any
@@ -6,7 +6,7 @@ pipeline {
         stage ("Testing") {
             steps{
                 script{
-                    test_file()
+                    unix_deploy()
                 }
             }
         }
