@@ -20,7 +20,7 @@ pipeline {
             steps{
                 script{
                     String varName = "${env.BRANCH_NAME}_fmr_unix"
-                    println ${varName}"
+                    println "${varName}"
                     //unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: ${env.BRANCH_NAME}_fmr_unix})
                 }
             }
