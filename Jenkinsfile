@@ -3,7 +3,7 @@
 pipeline {
     agent any
     environment {
-        unix_dev = ${env.BRANCH_NAME}
+        unix_dev = "${env.BRANCH_NAME}"
     }
 
     stages{
