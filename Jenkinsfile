@@ -4,7 +4,7 @@ pipeline {
     agent any
     environment { 
         unix_src_path = "unix_scripts/"
-        unix_deploy_path = "/tmp/"
+        unix_deploy_path = "/tmp/result_manish/"
         main_fmr_unix = "euz1nldw04"
     }
     parameters {
