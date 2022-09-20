@@ -7,14 +7,14 @@ pipeline {
         unix_deploy_path = "/tmp/"
     }
     parameters {
-        choice choices: ['Yes', 'No'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy to Unix'
+        choice choices: ['Yes', 'No'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
     }
 
     stages{
-        stage ("Testing") {
+        stage ("Deploy to Unix") {
             when {
                 expression {
-
+                    params.Deploy_to_Unix == "Yes"
                 }
             }
             steps{
