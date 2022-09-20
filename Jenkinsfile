@@ -1,4 +1,4 @@
-@Library('library-demo@feature/doddam') _
+@Library('library-demo') _
 
 pipeline {
     agent any
