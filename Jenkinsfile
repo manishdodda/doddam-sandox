@@ -19,7 +19,7 @@ pipeline {
             }
             steps{
                 script{
-                    unix_deploy(String unix_src_path, String unix_deploy_path, String unix_server)
+                    unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: unix_server)
                 }
             }
         }
