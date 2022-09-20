@@ -5,7 +5,6 @@ pipeline {
     environment { 
         unix_src_path = "unix_scripts/"
         unix_deploy_path = "/tmp/"
-        unix_server = "${env.BRANCH_NAME}_fmr_unix"
         main_fmr_unix = "euz1nldw04"
     }
     parameters {
@@ -20,7 +19,7 @@ pipeline {
             }
             steps{
                 script{
-                    unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: ${env.BRANCH_NAME}_fmr_unix)
+                    unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: {env.BRANCH_NAME}_fmr_unix)
                 }
             }
         }
