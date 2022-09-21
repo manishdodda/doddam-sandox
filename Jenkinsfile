@@ -13,15 +13,39 @@ pipeline {
     }
 
     stages{
-        stage ("Deploy to Unix") {
-            when {
-                expression { params.Deploy_to_Unix == "Yes" }
-            }
+        stage ('Get Prerequisites') {
             steps{
                 script{
-                    //String varName = "${env.BRANCH_NAME}_fmr_unix"
-                    println env.test_project
-                    //unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: "${getProperty("${env.BRANCH_NAME}_fmr_unix")}")
+                    def var1 = "Testing"
+                }
+            }
+        }
+        stage ("Demo Deployment") {
+            parallel {
+                stage ("Deploy to Unix"){
+                    when {
+                        expression { params.Deploy_to_Unix == "Yes" }
+                    }
+                    steps{
+                        script{
+                            //String varName = "${env.BRANCH_NAME}_fmr_unix"
+                            //println env.test_project
+                            unix_deploy(src: unix_src_path, dest: unix_deploy_path, server: "${getProperty("${env.BRANCH_NAME}_fmr_unix")}")
+                        }
+                    }
+                }
+                stage ("Deploy to Snowflake"){
+                    when {
+                        expression { params.Deploy_to_Snowflake == "Yes" }
+                    }
+                    steps{
+                        script{
+                            //String varName = "${env.BRANCH_NAME}_fmr_unix"
+                            //println env.test_project
+                            println var1
+                            //snowflake_deploy(var1: ${}
+                        }
+                    }
                 }
             }
         }
