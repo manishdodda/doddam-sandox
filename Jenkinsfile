@@ -5,8 +5,8 @@ pipeline {
     environment { 
         unix_src_path = "unix_scripts"
         unix_deploy_path = "/tmp"
-        main_fmr_unix = "euz1nldw04"
-        var1 = "${env.test_project}"
+        //dev_fmr_unix = "euz1nldw04"
+        var1 = "${getProperty("${env.BRANCH_NAME}_fmr_unix")}"
     }
     parameters {
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
@@ -34,10 +34,7 @@ pipeline {
                     }
                     steps{
                         script{
-                            //String varName = "${env.BRANCH_NAME}_fmr_unix"
-                            //println env.test_project
-                            println var1
-                            //snowflake_deploy(var1: ${}
+                            snowflake_deploy(temp: var1)
                         }
                     }
                 }
