@@ -6,7 +6,7 @@ pipeline {
         unix_src_path = "unix_scripts"
         unix_deploy_path = "/tmp"
         snowflake_url = "${getProperty("${env.BRANCH_NAME}_fmr_snowflake")}"
-        snowflake_cred = "${getProperty("${env.BRANCH_NAME}_snowflake")}"
+        snowflake_cred = "${env.BRANCH_NAME}_snowflake"
     }
     parameters {
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
