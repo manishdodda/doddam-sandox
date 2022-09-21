@@ -6,6 +6,7 @@ pipeline {
         unix_src_path = "unix_scripts"
         unix_deploy_path = "/tmp"
         main_fmr_unix = "euz1nldw04"
+        var1 = "${env.test_project}"
     }
     parameters {
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
@@ -13,13 +14,6 @@ pipeline {
     }
 
     stages{
-        stage ('Get Prerequisites') {
-            steps{
-                script{
-                    def var1 = "Testing"
-                }
-            }
-        }
         stage ("Demo Deployment") {
             parallel {
                 stage ("Deploy to Unix"){
