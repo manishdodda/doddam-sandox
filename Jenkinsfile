@@ -5,6 +5,8 @@ pipeline {
     environment { 
         unix_src_path = "unix_scripts"
         unix_deploy_path = "/tmp"
+        snowflake_driver = "net.snowflake.client.jdbc.SnowflakeDriver"
+        snowflake_changeLogFile = "changelog_Release1.sf.xml"
         snowflake_url = "${getProperty("${env.BRANCH_NAME}_fmr_snowflake")}"
         snowflake_cred = "${env.BRANCH_NAME}_snowflake"
     }
@@ -34,7 +36,10 @@ pipeline {
                     }
                     steps{
                         script{
-                            snowflake_deploy(url: snowflake_url, cred: snowflake_cred)
+                            snowflake_deploy(url: snowflake_url, 
+                                             cred: snowflake_cred,
+                                             driver: snowflake_driver,
+                                             changelog: snowflake_changeLogFile )
                         }
                     }
                 }
