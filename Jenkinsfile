@@ -22,7 +22,7 @@ pipeline {
             }
             steps{
                 script{
-                    println "I am in the Main branch"
+                    email.approval()
                 }
             }
         }
