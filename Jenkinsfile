@@ -22,7 +22,11 @@ pipeline {
                     when {
                         expression { "${env.BRANCH_NAME}" == "main" }
                     }
-                    println "I am in the Main branch"
+                    steps{
+                        script{
+                            println "I am in the Main branch"
+                        }
+                    }
                 }
                 stage ("Deploy to Unix"){
                     when {
