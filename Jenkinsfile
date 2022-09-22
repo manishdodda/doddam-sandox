@@ -16,18 +16,18 @@ pipeline {
     }
 
     stages{
+        stage("Approval for Prod"){
+            when {
+                expression { "${env.BRANCH_NAME}" == "main" }
+            }
+            steps{
+                script{
+                    println "I am in the Main branch"
+                }
+            }
+        }
         stage ("Demo Deployment") {
             parallel {
-                stage("Approval for Prod"){
-                    when {
-                        expression { "${env.BRANCH_NAME}" == "main" }
-                    }
-                    steps{
-                        script{
-                            println "I am in the Main branch"
-                        }
-                    }
-                }
                 stage ("Deploy to Unix"){
                     when {
                         expression { params.Deploy_to_Unix == "Yes" }
