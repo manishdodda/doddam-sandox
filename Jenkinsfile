@@ -22,7 +22,7 @@ pipeline {
             }
             steps{
                 script{
-                    email.approval()
+                    email_approval()
                 }
             }
         }
