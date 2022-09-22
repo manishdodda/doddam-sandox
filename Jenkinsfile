@@ -18,6 +18,12 @@ pipeline {
     stages{
         stage ("Demo Deployment") {
             parallel {
+                stage("Approval for Prod"){
+                    when {
+                        expression { "${env.BRANCH_NAME}" == "main" }
+                    }
+                    println "I am in the Main branch"
+                }
                 stage ("Deploy to Unix"){
                     when {
                         expression { params.Deploy_to_Unix == "Yes" }
