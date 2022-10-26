@@ -3,7 +3,7 @@
 pipeline {
     agent any
     environment {
-        unix_server = "server1"
+        unix_server = "EUZ1NLDW04"
         unix_src_path = "unix_scripts"
         unix_deploy_path = "/tmp"
     }
