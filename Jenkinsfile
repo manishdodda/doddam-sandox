@@ -5,7 +5,7 @@ pipeline {
     environment {
         unix_server = "EUZ1NLDW04"
         unix_src_path = "unix_scripts"
-        unix_deploy_path = "/tmp"
+        unix_deploy_path = "/tmp/result_manish"
         unix_service_account = "srvamr-sfaops@amer"
     }
     stages{
