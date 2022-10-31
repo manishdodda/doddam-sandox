@@ -14,7 +14,7 @@ pipeline {
                 script{
                     unix_deploy(src: unix_src_path, 
                                 dest: unix_deploy_path, 
-                                server: unix_server
+                                server: unix_server,
                                 service_account: unix_service_account)
                 }
             }
