@@ -8,6 +8,8 @@ pipeline {
         unix_deploy_path = "/tmp/result_manish"
         unix_service_account = "srvamr-sfaops@amer"
         file_permissions = "755"
+        unix_owner = "sfa-tds"
+        unix_group = "sfa-tds-etl-l-g"
     }
     stages{
         stage("Testing Unix Deployment"){
@@ -17,7 +19,9 @@ pipeline {
                                 dest: unix_deploy_path, 
                                 server: unix_server,
                                 service_account: unix_service_account,
-                                permissions: file_permissions)
+                                permissions: file_permissions,
+                                group: unix_group, 
+                                owner: unix_owner)
                 }
             }
         }
