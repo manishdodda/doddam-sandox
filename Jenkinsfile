@@ -2,8 +2,6 @@
 
 pipeline {
     agent any
-    environment {
-    }
     stages{
         stage("Testing Pfizer Align PostgreSQL Deployment"){
             steps{
