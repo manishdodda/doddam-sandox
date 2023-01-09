@@ -1,7 +1,7 @@
 @Library('library-demo') _
 
 pipeline {
-    agent any}
+    agent any
     parameters {
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into PostgreSQL Environment', name: 'Deploy_to_PostgreSQL'
     }
