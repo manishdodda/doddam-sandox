@@ -16,7 +16,10 @@ pipeline {
     }
     post {
         failure {
-           notification_email() 
+            notification_email() 
+        }
+        success {
+            notification_email()
         }
     }
 }
