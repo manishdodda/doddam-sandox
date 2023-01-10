@@ -9,6 +9,7 @@ pipeline {
         stage("Testing email notifications"){
             steps{
                 script{
+                    error "Testing notification"
                     sh 'echo "Hello" '
                 }
             }
