@@ -19,10 +19,10 @@ pipeline {
     }
     post {
         failure {
-            notification_email(Email_Alert,Notify_to) 
+            notification_email(Email_Alert: emailEmail_Alert, Notify_to: Notify_to) 
         }
         success {
-            notification_email(Email_Alert,Notify_to)
+            notification_email(Email_Alert: emailEmail_Alert, Notify_to: Notify_to)
         }
     }
 }
