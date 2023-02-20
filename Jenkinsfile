@@ -1,4 +1,4 @@
-@Library('sfdi-devops-tools-infra') _
+@Library('library-demo') _
 
 pipeline {
     agent any
