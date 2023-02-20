@@ -5,7 +5,7 @@ pipeline {
     environment {
         snowflake_changeLogFile_COMETL_PA__db = "snowflake/COMETL_PA/changelog.sf.xml"
         snowflake_COMETL_PA__db_url = "${getProperty("dev_pfzalgn_snowflake_COMETL_PA_db_url")}"
-        snowflake_credid = "dev_pfzalgn_snowflake_credid"
+        snowflake_credid = "test_dry_run_cred"
         unix_permission = "775"
     }
     parameters {
