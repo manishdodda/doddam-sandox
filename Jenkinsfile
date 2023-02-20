@@ -20,7 +20,7 @@ pipeline {
                 steps{
                     script{
                         println "Testing Dryrun"
-                        snowflake_deploy(url: snowflake_COMETL_PA__db_url, cred: snowflake_credid, changelog: snowflake_changeLogFile_COMETL_PA__db. dry_run: params.dry_run )
+                        snowflake_deploy(url: snowflake_COMETL_PA__db_url, cred: snowflake_credid, changelog: snowflake_changeLogFile_COMETL_PA__db. dry_run: dry_run )
                         }
                 }
         }
