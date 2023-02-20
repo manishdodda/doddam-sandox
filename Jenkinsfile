@@ -9,9 +9,7 @@ pipeline {
         unix_permission = "775"
     }
     parameters {
-        choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into PostgreSQL Environment', name: 'Deploy_to_PostgreSQL'
-        choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Unix Environment', name: 'Deploy_to_Unix'
-        choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Snowflake Environment', name: 'Deploy_to_Snowflake_COMETL_CONTROL'
+        choice choices: ['No', 'Yes'], description: 'Mention if You want to Dry Run', name: 'dry_run'
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Snowflake Environment', name: 'Deploy_to_Snowflake_COMETL_PA'
     }
     stages{
@@ -21,8 +19,8 @@ pipeline {
             }
                 steps{
                     script{
-                        println "Deploying into COMETL_PA ${env.BRANCH_NAME} environment"
-                        snowflake_deploy(url: snowflake_COMETL_PA__db_url, cred: snowflake_credid, changelog: snowflake_changeLogFile_COMETL_PA__db)
+                        println "Testing Dryrun"
+                        snowflake_deploy(url: snowflake_COMETL_PA__db_url, cred: snowflake_credid, changelog: snowflake_changeLogFile_COMETL_PA__db. dry_run: params.dry_run )
                         }
                 }
         }
