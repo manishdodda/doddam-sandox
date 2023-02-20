@@ -9,7 +9,7 @@ pipeline {
         unix_permission = "775"
     }
     parameters {
-        choice choices: ['No', 'Yes'], description: 'Mention if You want to Dry Run', name: 'dry_run'
+        choice choices: ['Yes', 'No'], description: 'Mention if You want to Dry Run', name: 'dry_run'
         choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Snowflake Environment', name: 'Deploy_to_Snowflake_COMETL_PA'
     }
     stages{
