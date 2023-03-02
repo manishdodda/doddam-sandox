@@ -3,21 +3,26 @@
 pipeline {
     agent any
     environment {
-        //pgdb_credid = "${env.BRANCH_NAME}_snowflake_credid"
-        pgdb_credid = "dev_pgdb"
-        pgdb_url = "${getProperty("${env.BRANCH_NAME}_pfzalgn_pgdb_url")}"
-        pgdb_changeLogFile = "changelog.pg.xml"
+        snowflake_changeLogFile_COMETL_PA__db = "snowflake/COMETL_PA/changelog.sf.xml"
+        snowflake_COMETL_PA__db_url = "${getProperty("dev_pfzalgn_snowflake_COMETL_PA_db_url")}"
+        snowflake_credid = "test_dry_run_cred"
+        unix_permission = "775"
     }
     parameters {
-        choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into PostgreSQL Environment', name: 'Deploy_to_PostgreSQL'
+        choice choices: ['Yes', 'No'], description: 'Mention if You want to Dry Run', name: 'dry_run'
+        choice choices: ['No', 'Yes'], description: 'Mention if You want to Deploy into Snowflake Environment', name: 'Deploy_to_Snowflake_COMETL_PA'
     }
     stages{
-        stage("Testing Pfizer Align PostgreSQL Deployment"){
-            steps{
-                script{
-                    postgresql_deploy(url: pgdb_url, cred: pgdb_credid, changelog: pgdb_changeLogFile)
-                }
+        stage ("Deploy to Snowflake Datbase - COMETL_PA"){
+            when {
+                 expression { params.Deploy_to_Snowflake_COMETL_PA == "Yes" }
             }
+                steps{
+                    script{
+                        println "Testing Dryrun"
+                        snowflake_deploy(url: snowflake_COMETL_PA__db_url, cred: snowflake_credid, changelog: snowflake_changeLogFile_COMETL_PA__db, dry_run: dry_run )
+                        }
+                }
         }
     }
 }
