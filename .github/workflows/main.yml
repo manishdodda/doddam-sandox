@@ -17,7 +17,7 @@ jobs:
   create_and_replace:
     runs-on: ubuntu-latest
     steps:
-      - name: Check branch name format
+      - name: Check branch name format and existence
         run: |
           if [[ "${{ github.event.inputs.branchName }}" == "main" ]]; then
             echo "Branch name cannot be 'main', please provide a different name."
@@ -25,19 +25,15 @@ jobs:
           elif [[ ! "${{ github.event.inputs.branchName }}" =~ ^feature.* ]]; then
             echo "Branch name should start with 'feature', please provide a different name."
             exit 1
+          elif git show-ref --verify --quiet "refs/heads/${{ github.event.inputs.branchName }}"; then
+            echo "Branch already exists, exiting."
+            exit 1
           fi
 
       - name: Checkout main branch
         uses: actions/checkout@v2
         with:
           ref: 'main'
-
-      - name: Check if branch already exists
-        run: |
-          if git branch --list ${{ github.event.inputs.branchName }}; then
-            echo "Branch already exists, exiting."
-            exit 1
-          fi
 
       - name: Create new branch
         run: git checkout -b ${{ github.event.inputs.branchName }}
