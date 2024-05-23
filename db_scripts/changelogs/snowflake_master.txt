@@ -1,5 +1,5 @@
 #!/bin/bash
-. $SCRIPT_PATH/k_project_name_config.cfg
+. $SCRIPT_PATH/config.cfg
 
 P_CONNECTION=$1
 P_SCHEMA_NAME=$2

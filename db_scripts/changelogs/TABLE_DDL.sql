@@ -1,4 +1,4 @@
-create or replace TABLE k_database_name.k_schema_name.k_project_name_AUDIT_DTLS (
+create or replace TABLE SFDB.DEPLOY.AUDIT_DTLS (
 	AUDIT_ID NUMBER(38,0),
 	APPLICATION_ID NUMBER(38,0),
 	BATCH_ID NUMBER(38,0),
@@ -23,7 +23,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_AUDIT_DTLS 
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_project_name_DATA_VLDTN_ADT_DTLS (
+create or replace TABLE SFDB.DEPLOY.DATA_VLDTN_ADT_DTLS (
 	BATCH_ID NUMBER(38,0),
 	RULE_ID NUMBER(38,0),
 	SUB_AREA_NM VARCHAR(100),
@@ -46,7 +46,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_DATA_VLDTN_
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_project_name_DATA_VLDTN_RULE (
+create or replace TABLE SFDB.DEPLOY.DATA_VLDTN_RULE (
 	RULE_ID NUMBER(38,0),
 	SUB_AREA_NM VARCHAR(100),
 	INTERFACE_NM VARCHAR(100),
@@ -76,7 +76,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_DATA_VLDTN_
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_project_name_ERROR_DTLS (
+create or replace TABLE SFDB.DEPLOY.ERROR_DTLS (
 	BATCH_ID NUMBER(38,0),
 	RULE_ID NUMBER(38,0),
 	RULE_TYPE VARCHAR(100),
@@ -92,7 +92,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_ERROR_DTLS 
 );
 
 
-create or replace TABLE k_database_name.k_schema_name.k_project_name_BATCH_RUN_DTLS (
+create or replace TABLE SFDB.DEPLOY.BATCH_RUN_DTLS (
 	BATCH_ID NUMBER(38,0),
 	APPLICATION_ID NUMBER(38,0),
 	SUBJECT_AREA_NAME VARCHAR(200),
@@ -106,7 +106,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_BATCH_RUN_D
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_project_name_PARAMETER_TABLE (
+create or replace TABLE SFDB.DEPLOY.PARAMETER_TABLE (
 	APPLICATION_ID NUMBER(38,0) autoincrement start 1 increment 1 order,
 	SUBJECT_AREA_NAME VARCHAR(200),
 	INTERFACE_NAME VARCHAR(200),
@@ -124,7 +124,7 @@ create or replace TABLE k_database_name.k_schema_name.k_project_name_PARAMETER_T
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_proj_name_APPLICATION_DTLS (
+create or replace TABLE SFDB.DEPLOY.k_proj_name_APPLICATION_DTLS (
 	APPLICATION_ID NUMBER(38,0) autoincrement start 1 increment 1 order,
 	APPLICATION_NAME VARCHAR(200),
 	APPLICATION_DESC VARCHAR(200),

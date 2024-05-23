@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE k_database_name.k_schema_name.SP_k_project_name_DATA_VALDTN_INS("P_SUB_AREA_NM" VARCHAR(16777216), "P_INTERFACE_NM" VARCHAR(16777216), "P_OBJECT_LAYER" VARCHAR(16777216), "P_DATABASE_NM" VARCHAR(16777216))
+CREATE OR REPLACE PROCEDURE SFDB.DEPLOY.SP_DATA_VALDTN_INS("P_SUB_AREA_NM" VARCHAR(16777216), "P_INTERFACE_NM" VARCHAR(16777216), "P_OBJECT_LAYER" VARCHAR(16777216), "P_DATABASE_NM" VARCHAR(16777216))
 RETURNS VARCHAR(16777216)
 LANGUAGE JAVASCRIPT
 STRICT
@@ -9,12 +9,12 @@ AS '
 		snowflake.execute({ sqlText: "Begin Transaction;"});
 		var v_return_value="";
 		
-		var V_AUDIT_INS_SQ = `CALL k_database_name.k_schema_name.SP_k_project_name_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_k_project_name_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''Procedure'', ''R'',''NA'' )`; 
+		var V_AUDIT_INS_SQ = `CALL SFDB.DEPLOY.SP_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''Procedure'', ''R'',''NA'' )`; 
 		
         v_return_value += "\\n V_AUDIT_INS_SQ: " + V_AUDIT_INS_SQ;
         var V_AUDIT_INS_ST = snowflake.createStatement( {sqlText: V_AUDIT_INS_SQ} ).execute();
 		
-		var V_SQ1 = `SELECT BATCH_ID FROM k_database_name.k_schema_name.k_project_name_BATCH_RUN_DTLS WHERE UPPER(SUBJECT_AREA_NAME)=UPPER(''`+ P_SUB_AREA_NM +`'') 
+		var V_SQ1 = `SELECT BATCH_ID FROM SFDB.DEPLOY.BATCH_RUN_DTLS WHERE UPPER(SUBJECT_AREA_NAME)=UPPER(''`+ P_SUB_AREA_NM +`'') 
 		AND LOAD_STATUS = ''R''`;
 		var V_ST1 = snowflake.createStatement( {sqlText: V_SQ1} ).execute();
 		if(V_ST1.next())
@@ -27,7 +27,7 @@ AS '
 			v_return_value +=''No batch is open for the interface. Open a new batch.''
 			throw v_return_value;
 		}
-		var V_SQ2 = `SELECT DISTINCT SRC_TABLE_SCHEMA, SRC_TABLENM, RUN_ID_FIELD FROM k_database_name.k_schema_name.DATA_VLDTN_RULE WHERE IS_ACTIVE = ''Y''
+		var V_SQ2 = `SELECT DISTINCT SRC_TABLE_SCHEMA, SRC_TABLENM, RUN_ID_FIELD FROM SFDB.DEPLOY.DATA_VLDTN_RULE WHERE IS_ACTIVE = ''Y''
             AND UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'')
             AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM + `'')
             AND UPPER(OBJECT_LAYER)= UPPER(''` + P_OBJECT_LAYER + `'')`;
@@ -54,13 +54,13 @@ AS '
 		}
 		
 		
-		var V_SQ4 = `DELETE FROM  k_database_name.k_schema_name.k_project_name_ERROR_DTLS WHERE BATCH_ID=`+ V_BATCH_ID +` AND SUB_AREA_NM = ''` + P_SUB_AREA_NM +`''
+		var V_SQ4 = `DELETE FROM  SFDB.DEPLOY.ERROR_DTLS WHERE BATCH_ID=`+ V_BATCH_ID +` AND SUB_AREA_NM = ''` + P_SUB_AREA_NM +`''
 		AND OBJECT_LAYER =''` + P_OBJECT_LAYER +`'' AND INTERFACE_NM =''` + P_INTERFACE_NM +`''`;
 		
 		var V_ST4 = snowflake.createStatement( {sqlText: V_SQ4} ).execute();
 		
 		var V_SQ5 =`SELECT RULE_ID,VALIDATION_COLUMN_NM,RULE_SQL,RULE_DESC,RULE_TYPE,ERROR_MSG,UNIQUE_KEY, SRC_TABLENM
-        FROM k_database_name.k_schema_name.DATA_VLDTN_RULE WHERE IS_ACTIVE = ''Y'' AND 
+        FROM SFDB.DEPLOY.DATA_VLDTN_RULE WHERE IS_ACTIVE = ''Y'' AND 
 		UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'') AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM +`'') 
 		AND UPPER(OBJECT_LAYER)= UPPER(''` + P_OBJECT_LAYER +`'')`;
 		var V_ST5 = snowflake.createStatement( {sqlText: V_SQ5} ).execute();
@@ -103,8 +103,8 @@ AS '
 				v_return_value += "\\n V_SRC_CNT: " + V_SRC_CNT;
 			}
 			
-			var V_SQ6 =`INSERT INTO k_database_name.k_schema_name.k_project_name_ERROR_DTLS SELECT
-			` + V_BATCH_ID +`,` + V_RULE_ID + `,''` + V_RULE_TYPE + `'', ''` + P_SUB_AREA_NM + `'', ''` + P_INTERFACE_NM + `'', ''` + P_OBJECT_LAYER + `'', ` +  V_UNIQUE_KEY  + `, ''` + V_SRC_TABLE_SCHEMA + `'',''` + V_SRC_TABLE_NAME + `'',''` + V_ERROR_MSG +`'', CURRENT_DATE(),  ''k_user''  FROM `+ V_SRC_TABLE +` WHERE ` + V_WHERE_CLAUSE +` AND BATCH_ID =` + V_BATCH_ID + ``;
+			var V_SQ6 =`INSERT INTO SFDB.DEPLOY.ERROR_DTLS SELECT
+			` + V_BATCH_ID +`,` + V_RULE_ID + `,''` + V_RULE_TYPE + `'', ''` + P_SUB_AREA_NM + `'', ''` + P_INTERFACE_NM + `'', ''` + P_OBJECT_LAYER + `'', ` +  V_UNIQUE_KEY  + `, ''` + V_SRC_TABLE_SCHEMA + `'',''` + V_SRC_TABLE_NAME + `'',''` + V_ERROR_MSG +`'', CURRENT_DATE(),  ''devops''  FROM `+ V_SRC_TABLE +` WHERE ` + V_WHERE_CLAUSE +` AND BATCH_ID =` + V_BATCH_ID + ``;
 			
 			v_return_value += "\\n V_SQ6: " + V_SQ6;
 			
@@ -120,8 +120,8 @@ AS '
 				v_return_value += "\\n V_SRC_CNT: " + V_SRC_CNT;
 			}
 			
-			var V_SQ6 =`INSERT INTO k_database_name.k_schema_name.k_project_name_ERROR_DTLS SELECT
-			` + V_BATCH_ID +`,` + V_RULE_ID + `,''` + V_RULE_TYPE + `'', ''` + P_SUB_AREA_NM + `'', ''` + P_INTERFACE_NM + `'', ''` + P_OBJECT_LAYER + `'', ` +  V_UNIQUE_KEY  + `, ''` + V_SRC_TABLE_SCHEMA + `'',''` + V_SRC_TABLE_NAME + `'',''` + V_ERROR_MSG +`'', CURRENT_DATE(),  ''k_user''  FROM `+ V_SRC_TABLE +` WHERE ` + V_WHERE_CLAUSE +``;
+			var V_SQ6 =`INSERT INTO SFDB.DEPLOY.ERROR_DTLS SELECT
+			` + V_BATCH_ID +`,` + V_RULE_ID + `,''` + V_RULE_TYPE + `'', ''` + P_SUB_AREA_NM + `'', ''` + P_INTERFACE_NM + `'', ''` + P_OBJECT_LAYER + `'', ` +  V_UNIQUE_KEY  + `, ''` + V_SRC_TABLE_SCHEMA + `'',''` + V_SRC_TABLE_NAME + `'',''` + V_ERROR_MSG +`'', CURRENT_DATE(),  ''devops''  FROM `+ V_SRC_TABLE +` WHERE ` + V_WHERE_CLAUSE +``;
 			
 			v_return_value += "\\n V_SQ6: " + V_SQ6;
 			
@@ -129,7 +129,7 @@ AS '
 		}
 		
 		
-		var V_SQ7 =`SELECT COUNT(*) FROM k_database_name.k_schema_name.k_project_name_ERROR_DTLS 
+		var V_SQ7 =`SELECT COUNT(*) FROM SFDB.DEPLOY.ERROR_DTLS 
 		WHERE BATCH_ID=` + V_BATCH_ID +` AND UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM +`'') AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM + `'') AND UPPER(SRC_TABLENM)= UPPER(''` + V_SRC_TABLE_NAME + `'') AND RULE_ID =` + V_RULE_ID +` AND RULE_TYPE =''` + V_RULE_TYPE +`''`;
 		var V_ST7  = snowflake.createStatement( {sqlText: V_SQ7} ).execute();
 		if(V_ST7.next())
@@ -146,7 +146,7 @@ AS '
 		}
   }
 		var V_SQ_VW = `SELECT DISTINCT SRC_TABLENM, SRC_TABLE_SCHEMA
-         FROM k_database_name.k_schema_name.k_project_name_ERROR_DTLS WHERE UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'') AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM +`'')  AND BATCH_ID =` + V_BATCH_ID +`  AND UPPER(OBJECT_LAYER)= UPPER(''` + P_OBJECT_LAYER +`'')`;
+         FROM SFDB.DEPLOY.ERROR_DTLS WHERE UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'') AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM +`'')  AND BATCH_ID =` + V_BATCH_ID +`  AND UPPER(OBJECT_LAYER)= UPPER(''` + P_OBJECT_LAYER +`'')`;
 						v_return_value += "\\n V_SQ_VW: " + V_SQ_VW;
 			
 			var V_ST_VW = snowflake.createStatement( {sqlText: V_SQ_VW} ).execute();
@@ -164,7 +164,7 @@ AS '
 				v_return_value += "\\n V_NAME: " + V_NAME;
 				v_return_value += "\\n V_SRC_NAME: " + V_SRC_NAME;
 				
-				var V_SQ_KEY = `SELECT DISTINCT UNIQUE_KEY FROM k_database_name.k_schema_name.DATA_VLDTN_RULE WHERE UPPER(SRC_TABLENM) = UPPER(''` + V_NM +`'') `;
+				var V_SQ_KEY = `SELECT DISTINCT UNIQUE_KEY FROM SFDB.DEPLOY.DATA_VLDTN_RULE WHERE UPPER(SRC_TABLENM) = UPPER(''` + V_NM +`'') `;
 				var V_ST_KEY = snowflake.createStatement( {sqlText: V_SQ_KEY} ).execute();
 					if(V_ST_KEY.next())
 						{
@@ -175,14 +175,14 @@ AS '
 				if(V_RUN_ID_FIELD==''BATCH_ID'')
 				{
 				var V_SQ_VW_2 =`CREATE OR REPLACE VIEW ` + V_NAME +` AS
-				SELECT distinct B.* , A.RULE_ID, A.RULE_TYPE, A.ERROR_MSG FROM k_database_name.k_schema_name.k_project_name_ERROR_DTLS A
+				SELECT distinct B.* , A.RULE_ID, A.RULE_TYPE, A.ERROR_MSG FROM SFDB.DEPLOY.ERROR_DTLS A
 				join `+ V_SRC_NAME +` B on A.SRC_UNIQUE_KEY = B.`+V_KEY_NM+` AND A.BATCH_ID = B.BATCH_ID where UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'') AND A.BATCH_ID=` + V_BATCH_ID +`  AND UPPER(SRC_TABLENM) = UPPER(''` + V_NM + `'')
             AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM + `'')`;
 				}
 				else 
 				{
 				var V_SQ_VW_2 =`CREATE OR REPLACE VIEW ` + V_NAME +` AS
-				SELECT distinct B.* , A.RULE_ID, A.RULE_TYPE, A.ERROR_MSG FROM k_database_name.k_schema_name.k_project_name_ERROR_DTLS A
+				SELECT distinct B.* , A.RULE_ID, A.RULE_TYPE, A.ERROR_MSG FROM SFDB.DEPLOY.ERROR_DTLS A
 				join `+ V_SRC_NAME +` B on A.SRC_UNIQUE_KEY = B.`+V_KEY_NM+` where UPPER(INTERFACE_NM) = UPPER(''` + P_INTERFACE_NM + `'')  AND A.BATCH_ID=` + V_BATCH_ID +` 
 				AND UPPER(SRC_TABLENM) = UPPER(''` + V_NM + `'') AND UPPER(SUB_AREA_NM) = UPPER(''` + P_SUB_AREA_NM + `'')`;	
 				}
@@ -201,7 +201,7 @@ AS '
 			
 		snowflake.execute({ sqlText: "COMMIT;"}); 
 		
-		var V_AUDIT_UPD_COMP_SQ = `CALL k_database_name.k_schema_name.SP_k_project_name_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_k_project_name_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''PROCEDURE'', ''C'',''NA'' )`;
+		var V_AUDIT_UPD_COMP_SQ = `CALL SFDB.DEPLOY.SP_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''PROCEDURE'', ''C'',''NA'' )`;
 		var V_AUDIT_UPD_COMP_ST = snowflake.createStatement( {sqlText: V_AUDIT_UPD_COMP_SQ} ).execute();
 	
 		return "SUCCEEDED, Details: " +v_return_value;
@@ -216,7 +216,7 @@ AS '
       v_return_value += "\\nStack Trace:\\n" + err.stackTraceTxt;
 	  var output_return_value=v_return_value.replace(/''/g,"''''");
 	  
-	  var V_AUDIT_UPD_FAIL_SQ = `CALL k_database_name.k_schema_name.SP_k_project_name_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_k_project_name_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''PROCEDURE'', ''F'',''`+output_return_value+`'')`;  
+	  var V_AUDIT_UPD_FAIL_SQ = `CALL SFDB.DEPLOY.SP_AUDIT_LOG(''`+P_INTERFACE_NM+`'',''SP_DATA_VALDTN_INS'',''`+P_SUB_AREA_NM+`'',''PROCEDURE'', ''F'',''`+output_return_value+`'')`;  
 	  var V_AUDIT_UPD_FAIL_ST = snowflake.createStatement( {sqlText: V_AUDIT_UPD_FAIL_SQ} ).execute();
 	}
 	if(check_flg==0)
