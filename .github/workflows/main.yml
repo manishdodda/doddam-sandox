@@ -57,12 +57,12 @@ jobs:
           if [ -z "${{ github.event.inputs.projectName }}" ]; then
             echo "projectName is empty"
             # Execute your command here if the variable is not present
-            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/_k_project_name_/_/g"
+            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name_//g"
             find db_scripts/changelogs -type f | while read -r file; do
               # Check if the file name contains the old string
               if [[ "$file" == *"k_project_name"* ]]; then
                   # Replace the k_project_name with the new project name
-                  new_name=$(echo "$file" | sed "s/_k_project_name_/_/")
+                  new_name=$(echo "$file" | sed "s/k_project_name_//")
                   mv "$file" "$new_name"
               fi
             done
