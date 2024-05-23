@@ -1,0 +1,22 @@
+name: Common Components Maker
+
+on:
+  workflow_dispatch:
+    inputs:
+      branchName:
+        description: 'Name of the new branch'
+        required: true
+
+jobs:
+  create_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: 'main'
+
+      - name: Create new branch
+        run: git checkout -b ${{ github.event.inputs.branchName }}
+        
+      # Add more steps as needed for your workflow
