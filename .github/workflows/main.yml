@@ -3,14 +3,20 @@ name: Common Component Maker
 on:
   workflow_dispatch:
     inputs:
+      projectName:
+        description: 'Project Name to be provided'
+        required: true
+      databaseName:
+        description: 'Database Name should be provided'
+        required: true
+      schemaName:
+        description: 'Schema Name should be provided'
+        required: true
+      userName:
+        description: 'Username should be provided'
+        required: true
       branchName:
         description: 'Name of the new branch. It should start with "feature" and not be "main".'
-        required: true
-      oldString:
-        description: 'Old string to replace'
-        required: true
-      newString:
-        description: 'New string to replace with'
         required: true
 
 jobs:
@@ -47,7 +53,20 @@ jobs:
 
       - name: Perform string replacement
         run: |
-          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g"
+          echo "Replacing the content inside files"
+          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectName }}/g"
+          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_database_name/${{ github.event.inputs.databaseName }}/g"
+          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_schema_name/${{ github.event.inputs.schemaName }}/g"
+          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_user/${{ github.event.inputs.userName }}/g"
+          echo "Replacing the file names"
+          find . -type f | while read -r file; do
+            # Check if the file name contains the old string
+            if [[ "$file" == *"k_project_name"* ]]; then
+                # Replace the k_project_name with the new project name
+                new_name=$(echo "$file" | sed "s/k_project_name/${{ github.event.inputs.projectName }}/")
+                mv "$file" "$new_name"
+            fi
+          done
 
       - name: Push changes to new branch
         run: |
