@@ -47,7 +47,7 @@ jobs:
 
       - name: Perform string replacement
         run: |
-          find . -type f -name "*" -print0 | xargs -0 sed -i  "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g"
+          find . -type f -name "*.*" -print0 | xargs -0 sed -i  "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g"
 
       - name: Push changes to new branch
         run: |
