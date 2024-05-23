@@ -5,7 +5,7 @@ on:
     inputs:
       projectName:
         description: 'Project Name to be provided'
-        required: true
+        required: false
       databaseName:
         description: 'Database Name should be provided'
         required: true
@@ -54,19 +54,32 @@ jobs:
       - name: Perform string replacement
         run: |
           echo "Replacing the content inside files"
-          find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectName }}/g"
+          if [ -z "${{ github.event.inputs.projectName }}" ]; then
+            echo "projectName is empty"
+            # Execute your command here if the variable is not present
+            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/_k_project_name_/_/g"
+            find db_scripts/changelogs -type f | while read -r file; do
+              # Check if the file name contains the old string
+              if [[ "$file" == *"k_project_name"* ]]; then
+                  # Replace the k_project_name with the new project name
+                  new_name=$(echo "$file" | sed "s/_k_project_name_/_/")
+                  mv "$file" "$new_name"
+              fi
+            done
+          else
+            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectName }}/g"
+            find db_scripts/changelogs -type f | while read -r file; do
+              # Check if the file name contains the old string
+              if [[ "$file" == *"k_project_name"* ]]; then
+                  # Replace the k_project_name with the new project name
+                  new_name=$(echo "$file" | sed "s/k_project_name/${{ github.event.inputs.projectName }}/")
+                  mv "$file" "$new_name"
+              fi
+            done
+          fi
           find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_database_name/${{ github.event.inputs.databaseName }}/g"
           find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_schema_name/${{ github.event.inputs.schemaName }}/g"
           find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_user/${{ github.event.inputs.userName }}/g"
-          echo "Replacing the file names"
-          find db_scripts/changelogs -type f | while read -r file; do
-            # Check if the file name contains the old string
-            if [[ "$file" == *"k_project_name"* ]]; then
-                # Replace the k_project_name with the new project name
-                new_name=$(echo "$file" | sed "s/k_project_name/${{ github.event.inputs.projectName }}/")
-                mv "$file" "$new_name"
-            fi
-          done
 
       - name: Push changes to new branch
         run: |
