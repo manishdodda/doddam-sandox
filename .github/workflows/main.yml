@@ -6,9 +6,15 @@ on:
       branchName:
         description: 'Name of the new branch'
         required: true
+      oldString:
+        description: 'Old string to replace'
+        required: true
+      newString:
+        description: 'New string to replace with'
+        required: true
 
 jobs:
-  create_branch:
+  create_and_replace:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
@@ -19,8 +25,10 @@ jobs:
       - name: Create new branch
         run: git checkout -b ${{ github.event.inputs.branchName }}
 
-      - name: Push new branch
+      - name: Perform string replacement
+        run: |
+          find . -type f -exec sed -i "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g" {} +
+
+      - name: Push changes to new branch
         run: |
           git push origin ${{ github.event.inputs.branchName }}
-        
-      # Add more steps as needed for your workflow
