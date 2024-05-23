@@ -51,6 +51,8 @@ jobs:
 
       - name: Push changes to new branch
         run: |
+          git config --global user.email "manish.dodda@pfizer.com"
+          git config --global user.name "manishdodda"
           git add .
           git commit -m "Replacement of Strings executed"
           git push origin ${{ github.event.inputs.branchName }}
