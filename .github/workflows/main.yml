@@ -25,9 +25,6 @@ jobs:
           elif [[ ! "${{ github.event.inputs.branchName }}" =~ ^feature.* ]]; then
             echo "Branch name should start with 'feature', please provide a different name."
             exit 1
-          # elif git show-ref --verify --quiet "refs/heads/${{ github.event.inputs.branchName }}"; then
-          #   echo "Branch already exists, exiting."
-          #   exit 1
           fi
 
       - name: Checkout main branch
@@ -40,26 +37,17 @@ jobs:
         run: |
           git fetch --all
           if git rev-parse --verify --quiet refs/remotes/origin/${{ github.event.inputs.branchName }}; then
-            echo "::set-output name=branch_exists::true"
-          else
-            echo "::set-output name=branch_exists::false"
+            echo "Error: Branch already exists."
+            exit 1
           fi
-
-      - name: Create branch if it doesn't exist
-        if: steps.check_branch.outputs.branch_exists == 'false'
+  
+      - name: Create branch
         run: |
           git checkout -b ${{ github.event.inputs.branchName }}
-          git push origin ${{ github.event.inputs.branchName }}
-
-      - name: Pull latest changes if branch exists
-        if: steps.check_branch.outputs.branch_exists == 'true'
-        run: |
-          git checkout ${{ github.event.inputs.branchName }}
-          git pull origin ${{ github.event.inputs.branchName }}
 
       - name: Perform string replacement
         run: |
-          find . -type f -name "*" -exec sed -i "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g" {} +
+          find . -type f -name "*" -print0 | xargs -0 sed -i  "s/${{ github.event.inputs.oldString }}/${{ github.event.inputs.newString }}/g"
 
       - name: Push changes to new branch
         run: |
