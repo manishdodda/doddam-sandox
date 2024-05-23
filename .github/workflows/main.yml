@@ -52,5 +52,5 @@ jobs:
       - name: Push changes to new branch
         run: |
           git add .
-          git commint -m "Replacement of Strings executed"
+          git commit -m "Replacement of Strings executed"
           git push origin ${{ github.event.inputs.branchName }}
