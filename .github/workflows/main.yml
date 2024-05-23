@@ -24,7 +24,7 @@ jobs:
 
       - name: Check if branch already exists
         run: |
-          if git rev-parse --verify "${{ github.event.inputs.branchName }}" > /dev/null 2>&1; then
+          if git branch --list ${{ github.event.inputs.branchName }}; then
             echo "Branch already exists, exiting."
             exit 1
           fi
