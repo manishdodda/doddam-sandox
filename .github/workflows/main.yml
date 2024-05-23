@@ -18,5 +18,9 @@ jobs:
 
       - name: Create new branch
         run: git checkout -b ${{ github.event.inputs.branchName }}
+
+      - name: Push new branch
+        run: |
+          git push origin ${{ github.event.inputs.branchName }}
         
       # Add more steps as needed for your workflow
