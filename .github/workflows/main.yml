@@ -25,9 +25,9 @@ jobs:
           elif [[ ! "${{ github.event.inputs.branchName }}" =~ ^feature.* ]]; then
             echo "Branch name should start with 'feature', please provide a different name."
             exit 1
-          elif git show-ref --verify --quiet "refs/heads/${{ github.event.inputs.branchName }}"; then
-            echo "Branch already exists, exiting."
-            exit 1
+          # elif git show-ref --verify --quiet "refs/heads/${{ github.event.inputs.branchName }}"; then
+          #   echo "Branch already exists, exiting."
+          #   exit 1
           fi
 
       - name: Checkout main branch
@@ -36,7 +36,9 @@ jobs:
           ref: 'main'
 
       - name: Create new branch
-        run: git checkout -b ${{ github.event.inputs.branchName }}
+        run: |
+          git checkout -b ${{ github.event.inputs.branchName }}
+          git pull
 
       - name: Perform string replacement
         run: |
