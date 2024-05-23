@@ -22,6 +22,13 @@ jobs:
         with:
           ref: 'main'
 
+      - name: Check if branch already exists
+        run: |
+          if git show-ref --verify --quiet "refs/heads/${{ github.event.inputs.branchName }}"; then
+            echo "Branch already exists, exiting."
+            exit 1
+          fi
+
       - name: Create new branch
         run: git checkout -b ${{ github.event.inputs.branchName }}
 
