@@ -3,7 +3,7 @@ name: Common Component Maker
 on:
   workflow_dispatch:
     inputs:
-      projectName:
+      projectPrefix:
         description: 'Project Name to be provided'
         required: false
       databaseName:
@@ -54,8 +54,8 @@ jobs:
       - name: Perform string replacement
         run: |
           echo "Replacing the content inside files"
-          if [ -z "${{ github.event.inputs.projectName }}" ]; then
-            echo "projectName is empty"
+          if [ -z "${{ github.event.inputs.projectPrefix }}" ]; then
+            echo "projectPrefix is empty"
             # Execute your command here if the variable is not present
             find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name_//g"
             find db_scripts/changelogs -type f | while read -r file; do
@@ -67,12 +67,12 @@ jobs:
               fi
             done
           else
-            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectName }}/g"
+            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectPrefix }}/g"
             find db_scripts/changelogs -type f | while read -r file; do
               # Check if the file name contains the old string
               if [[ "$file" == *"k_project_name"* ]]; then
                   # Replace the k_project_name with the new project name
-                  new_name=$(echo "$file" | sed "s/k_project_name/${{ github.event.inputs.projectName }}/")
+                  new_name=$(echo "$file" | sed "s/k_project_name/${{ github.event.inputs.projectPrefix }}/")
                   mv "$file" "$new_name"
               fi
             done
