@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       projectPrefix:
-        description: 'Project Name to be provided'
+        description: 'projectPrefix to be provided'
         required: false
       databaseName:
         description: 'Database Name should be provided'
