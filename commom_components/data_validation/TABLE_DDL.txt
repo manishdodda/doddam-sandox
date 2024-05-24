@@ -124,7 +124,7 @@ create or replace TABLE k_proj_nm_PARAMETER_TABLE (
 
 
 
-create or replace TABLE k_database_name.k_schema_name.k_proj_name_APPLICATION_DTLS (
+create or replace TABLE COMETL_CONTROL_TEST_DB.COMETL_CONTROL_EMEA.k_proj_name_APPLICATION_DTLS (
 	APPLICATION_ID NUMBER(38,0) autoincrement start 1 increment 1 order,
 	APPLICATION_NAME VARCHAR(200),
 	APPLICATION_DESC VARCHAR(200),
