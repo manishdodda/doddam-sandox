@@ -3,6 +3,12 @@ name: Common Component Maker
 on:
   workflow_dispatch:
     inputs:
+      componentName:
+        type: choice
+        required: true
+        description: Please select the desired Component
+        options:
+          - Data Validation
       projectPrefix:
         description: 'projectPrefix to be provided'
         required: false
@@ -57,8 +63,8 @@ jobs:
           if [ -z "${{ github.event.inputs.projectPrefix }}" ]; then
             echo "projectPrefix is empty"
             # Execute your command here if the variable is not present
-            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name_//g"
-            find db_scripts/changelogs -type f | while read -r file; do
+            find commom_components/data_validation -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name_//g"
+            find commom_components/data_validation -type f | while read -r file; do
               # Check if the file name contains the old string
               if [[ "$file" == *"k_project_name"* ]]; then
                   # Replace the k_project_name with the new project name
@@ -67,8 +73,8 @@ jobs:
               fi
             done
           else
-            find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectPrefix }}/g"
-            find db_scripts/changelogs -type f | while read -r file; do
+            find commom_components/data_validation -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_project_name/${{ github.event.inputs.projectPrefix }}/g"
+            find commom_components/data_validation -type f | while read -r file; do
               # Check if the file name contains the old string
               if [[ "$file" == *"k_project_name"* ]]; then
                   # Replace the k_project_name with the new project name
@@ -77,9 +83,9 @@ jobs:
               fi
             done
           fi
-          find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_database_name/${{ github.event.inputs.databaseName }}/g"
-          find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_schema_name/${{ github.event.inputs.schemaName }}/g"
-          find db_scripts/changelogs -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_user/${{ github.event.inputs.userName }}/g"
+          find commom_components/data_validation -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_database_name/${{ github.event.inputs.databaseName }}/g"
+          find commom_components/data_validation -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_schema_name/${{ github.event.inputs.schemaName }}/g"
+          find commom_components/data_validation -type f -name "*.*" -print0 | xargs -0 sed -i  "s/k_user/${{ github.event.inputs.userName }}/g"
 
       - name: Push changes to new branch
         run: |
