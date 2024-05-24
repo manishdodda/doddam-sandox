@@ -1,5 +1,5 @@
 #!/bin/bash
-. /app/etl/palign/emea/scripts/k_project_name_config.cfg
+. /app/etl/palign/emea/scripts/PA_config.cfg
 
 P_CONNECTION=$1
 P_SCHEMA_NAME=$2

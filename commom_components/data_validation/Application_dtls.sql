@@ -1,4 +1,4 @@
-create or replace TABLE k_database_name.k_schema_name.k_project_name_APPLICATION_DTLS (
+create or replace TABLE COMETL_CONTROL_TEST_DB.COMETL_CONTROL_EMEA.PA_APPLICATION_DTLS (
 	APPLICATION_ID NUMBER(38,0) autoincrement start 1 increment 1 order,
 	APPLICATION_NAME VARCHAR(200),
 	APPLICATION_DESC VARCHAR(200),
